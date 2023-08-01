@@ -54,6 +54,40 @@ body,
 
 /* Grid layout ends */
 
+/* Draw board layout */
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(10px, 1fr));
+  grid-template-rows: repeat(3, minmax(10px, 1fr));
+}
+
+#top-left,
+#middle-left {
+  border-right: solid white 4px;
+  border-bottom: solid white 4px;
+}
+
+#top-center,
+#middle-center {
+  border-right: solid white 4px;
+  border-bottom: solid white 4px;
+}
+
+#top-right,
+#middle-right {
+  border-bottom: solid white 4px;
+}
+
+#bottom-left {
+  border-right: solid white 4px;
+}
+
+#bottom-center {
+  border-right: solid white 4px;
+}
+
+/* Draw board layout ENDS*/
+
 /* Modal form - player names */
 
 .modal-header,
