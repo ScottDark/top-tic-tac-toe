@@ -13,5 +13,49 @@
     />
     <script src="javascript.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <!-- Wrapper for entire game-->
+    <div class="wrapper">
+      <h1 id="game-title">TOP: Tic Tac Toe</h1>
+
+      <!-- Game board -->
+      <div id="game-board">
+        <div id="top-left"></div>
+        <div id="top-center"></div>
+        <div id="top-right"></div>
+
+        <div id="middle-left"></div>
+        <div id="middle-center"></div>
+        <div id="middle-right"></div>
+
+        <div id="bottom-left"></div>
+        <div id="bottom-center"></div>
+        <div id="bottom-right"></div>
+      </div>
+      <!-- Game board ends -->
+
+      <!-- Player names form-->
+      <form>
+        <label for="playerOne">Player 1 Name:</label>
+        <br />
+        <input type="text" id="player-one" />
+        <br />
+
+        <label for="playerTwo">Player 2 Name:</label>
+        <br />
+        <input type="text" id="player-two" />
+        <br />
+        <br />
+        <button id="submit-player-names" class="btn btn-primary">Submit</button>
+      </form>
+      <!-- Player names end -->
+
+      <div id="gameWinner"></div>
+
+      <button id="startNewGame" type="submit" class="btn btn-success">
+        Start New Game
+      </button>
+    </div>
+    <!-- Wrapper ends -->
+  </body>
 </html>
