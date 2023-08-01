@@ -33,12 +33,23 @@ body,
   grid-row: 2 / 3;
 }
 
+#start-game-button {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
 #player-name-button,
 #start-game-button {
   place-self: center;
 
   width: 80%;
   height: 50%;
+}
+
+#game-winner {
+  place-self: center;
+  grid-column: 2 / 3;
+  grid-row: 4 / 5;
 }
 
 /* Grid layout ends */
