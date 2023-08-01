@@ -1,0 +1,48 @@
+body,
+.wrapper {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 20% 60% 20%;
+  grid-template-rows: 10% 10% 60% 20%;
+  background-color: #222224;
+  color: white;
+}
+
+/* Grid layout */
+#game-title {
+  grid-column: 1 / 4;
+  place-self: center;
+}
+
+#game-board {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+#player-name-form {
+  grid-column: 2 / 3;
+  place-self: center;
+}
+
+/* Grid layout ends */
+
+/* Modal form - player names */
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  background: #222224;
+}
+
+.btn-close {
+  background: white;
+}
