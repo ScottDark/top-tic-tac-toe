@@ -6,30 +6,34 @@ function loadEventListeners() {
   const playerForm = document.querySelector("#player-name-form");
   playerForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    getPlayerNames();
   });
-}
-
-/* Player constructor */
-function Player(name, side) {
-  this.name = name;
-  this.side = side;
 }
 
 /* Get player names */
 function getPlayerNames() {
-  const player = document.querySelector("");
+  let playerXName = document.querySelector("#player-x");
+  let playerOName = document.querySelector("#player-o");
 
-  setPlayerData();
+  setPlayerData(playerXName, playerOName);
 }
 
 /* Set player information from form */
-function setPlayerData() {
-  const player = new Player();
+function setPlayerData(playerXName, playerOName) {
+  const playerX = {
+    name: playerXName,
+    side: "X",
+  };
+
+  const playerO = {
+    name: playerOName,
+    side: "O",
+  };
 }
 
 /* Store game board data */
 function setGameBoard() {
-  const gameBoardData = [];
+  let gameBoardData = [];
 
   gameLogic(gameBoardData);
 }
