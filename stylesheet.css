@@ -25,12 +25,20 @@ body,
 
 #game-board {
   grid-column: 2 / 3;
+  grid-row: 3 / 4;
+}
+
+#player-name-button {
+  grid-column: 1 / 2;
   grid-row: 2 / 3;
 }
 
-#player-name-form {
-  grid-column: 2 / 3;
+#player-name-button,
+#start-game-button {
   place-self: center;
+
+  width: 80%;
+  height: 50%;
 }
 
 /* Grid layout ends */
@@ -42,7 +50,4 @@ body,
 .modal-footer {
   background: #222224;
 }
-
-.btn-close {
-  background: white;
-}
+/* Modal form - player names END */
