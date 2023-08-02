@@ -7,6 +7,15 @@ function loadEventListeners() {
     e.preventDefault();
     getPlayerNames();
   });
+
+  const selectGameBoard = document.querySelector("#game-board");
+  const getGameBoardCell = selectGameBoard.querySelectorAll(":scope > div");
+
+  getGameBoardCell.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      setGameBoard(cell);
+    });
+  });
 }
 
 /* Get player names from form*/
@@ -29,9 +38,15 @@ function setPlayerData(playerName) {
   };
 }
 
+/*  */
+
 /* Store game board data */
-function setGameBoard() {
+function setGameBoard(cell) {
   let gameBoardData = [];
+
+  if (cell.value === undefined || null) {
+    cell.replaceChildren("X");
+  }
 
   gameLogic(gameBoardData);
 }
