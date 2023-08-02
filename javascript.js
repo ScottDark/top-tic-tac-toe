@@ -5,7 +5,7 @@ loadEventListeners();
 function loadEventListeners() {
   document.addEventListener("submit", (e) => {
     e.preventDefault();
-    getPlayerNames();
+    setPlayerData();
   });
 
   const selectGameBoard = document.querySelector("#game-board");
@@ -13,46 +13,47 @@ function loadEventListeners() {
 
   getGameBoardCell.forEach((cell) => {
     cell.addEventListener("click", () => {
-      setGameBoard(cell);
+      gameLogic(cell);
     });
   });
 }
 
-/* Get player names from form*/
-function getPlayerNames() {
-  const formGetPlayerNames = document.querySelector("#player-name-form");
-
-  setPlayerData(formGetPlayerNames);
-}
-
 /* Set player information from form */
-function setPlayerData(playerName) {
+function setPlayerData() {
+  const playerName = document.querySelector("#player-name-form");
+
+  // Default with no player names entered.
   const playerX = {
-    name: playerName.playerxname.value,
+    name: "Player X",
     side: "X",
   };
 
   const playerO = {
-    name: playerName.playeroname.value,
+    name: "Player O",
     side: "O",
   };
+  // If no entered names use default else use names from form.
+  if (playerX.name === "Player X" || playerO.name === "Player O") {
+    // Nothing - Use default player names.
+  } else {
+    playerX.name = playerName.playerxname.value;
+    playerO.name = playerName.playeroname.value;
+  }
+
+  return { playerX, playerO };
 }
 
 /*  */
 
-/* Store game board data */
-function setGameBoard(cell) {
-  let gameBoardData = [];
-
-  if (cell.value === undefined || null) {
-    cell.replaceChildren("X");
-  }
-
-  gameLogic(gameBoardData);
-}
-
 /* Game logic  to determine winner*/
-function gameLogic(gameBoardData) {}
+function gameLogic(cell) {
+  const player = setPlayerData();
+  if (cell.value === undefined) {
+    cell.textContent = "X";
+  } else {
+    // Do Nothing
+  }
+}
 
 /* Start new game button */
 function startNewGame() {}
