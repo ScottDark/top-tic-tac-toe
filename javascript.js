@@ -3,8 +3,7 @@ loadEventListeners();
 /* Prevent default on submit for player names form
    Loads event listeners on page load */
 function loadEventListeners() {
-  const playerForm = document.querySelector("#player-name-form");
-  playerForm.addEventListener("submit", (e) => {
+  document.addEventListener("submit", (e) => {
     e.preventDefault();
     getPlayerNames();
   });
@@ -12,14 +11,16 @@ function loadEventListeners() {
 
 /* Get player names */
 function getPlayerNames() {
-  let playerXName = document.querySelector("#player-x");
-  let playerOName = document.querySelector("#player-o");
+  const formGetPlayerNames = document.querySelector("#player-name-form");
 
-  setPlayerData(playerXName, playerOName);
+  setPlayerData(formGetPlayerNames);
 }
 
 /* Set player information from form */
-function setPlayerData(playerXName, playerOName) {
+function setPlayerData(playerName) {
+  let playerXName = playerName.playerxname.value;
+  let playerOName = playerName.playeroname.value;
+
   const playerX = {
     name: playerXName,
     side: "X",
