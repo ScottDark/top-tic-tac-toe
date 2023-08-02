@@ -96,3 +96,12 @@ body,
   background: #222224;
 }
 /* Modal form - player names END */
+
+/* X / O sizing on game board */
+
+#game-board > div {
+  display: grid;
+  font-size: 15vh;
+  align-content: center;
+  justify-items: center;
+}

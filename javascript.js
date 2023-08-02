@@ -9,7 +9,7 @@ function loadEventListeners() {
   });
 }
 
-/* Get player names */
+/* Get player names from form*/
 function getPlayerNames() {
   const formGetPlayerNames = document.querySelector("#player-name-form");
 
@@ -18,16 +18,13 @@ function getPlayerNames() {
 
 /* Set player information from form */
 function setPlayerData(playerName) {
-  let playerXName = playerName.playerxname.value;
-  let playerOName = playerName.playeroname.value;
-
   const playerX = {
-    name: playerXName,
+    name: playerName.playerxname.value,
     side: "X",
   };
 
   const playerO = {
-    name: playerOName,
+    name: playerName.playeroname.value,
     side: "O",
   };
 }
