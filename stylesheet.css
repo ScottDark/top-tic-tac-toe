@@ -95,6 +95,11 @@ body,
 .modal-footer {
   background: #222224;
 }
+
+.player-name-status {
+  font-size: 30px;
+  color: black;
+}
 /* Modal form - player names END */
 
 /* X / O sizing on game board */

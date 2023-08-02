@@ -6,6 +6,7 @@ function loadEventListeners() {
   document.addEventListener("submit", (e) => {
     e.preventDefault();
     setPlayerData();
+    document.querySelector(".player-name-status").removeAttribute("hidden");
   });
 
   const selectGameBoard = document.querySelector("#game-board");
@@ -33,7 +34,10 @@ function setPlayerData() {
     side: "O",
   };
   // If no entered names use default else use names from form.
-  if (playerX.name === "Player X" || playerO.name === "Player O") {
+  if (
+    playerName.playerxname.value === "" ||
+    playerName.playeroname.value === ""
+  ) {
     // Nothing - Use default player names.
   } else {
     playerX.name = playerName.playerxname.value;
