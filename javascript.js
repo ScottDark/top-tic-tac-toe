@@ -1,5 +1,26 @@
 loadGame();
 
+/* TO DO:
+Player objects get deleted after submitting because they go out of scope.
+The same thing happens after I click a square with no names. The default
+objects get deleted because the program ends and everything becomes out
+of scope and is released from memory after a click ends or names are 
+submitted.
+
+Solution:
+Figure out how to prevent the objects from going out of scope when names
+are submitted
+&&
+figure out how to keep the objects in scope after a cell is clicked.
+
+Fix:
+Make objects global variables
+Have a database to read and write from so they can be loaded on demand.
+
+We are not working with external storage besides memory yet so we have to
+either do global variables to keep them in scope or find a way to keep
+the program running while the page is open.*/
+
 /* Load the game necessary to start playing. */
 function loadGame() {
   getPlayerNames();
@@ -61,26 +82,29 @@ function determinePlayerName(PLAYER_FORM, player_X, player_O) {
   }
 }
 
-/* Game logic to determine game flow.*/
+/* Game logic to control game flow.*/
 function gameLogic(cell) {
   const PLAYER = createPlayerObjects();
-  let currentPlayerTurn = determinePlayerTurn(PLAYER);
   let isGameComplete = gameProgress();
-  placeMarkOnBoard(cell, currentPlayerTurn);
+
+  // Game continues until game is completed.
+
+  let currentPlayerTurn = determinePlayerTurn(PLAYER);
+
+  let checkCellEmpty = isCellEmpty(cell);
+  const CELL_IS_EMPTY = "Empty";
+
+  if (checkCellEmpty === CELL_IS_EMPTY) {
+    placeMarkOnBoard(cell, currentPlayerTurn);
+  }
 }
 
 /* Place marker on board depending on whose turn it is */
 function placeMarkOnBoard(cell, currentPlayerTurn) {
-  let checkCellEmpty = isCellEmpty(cell);
-
-  if (checkCellEmpty === true) {
-    if (currentPlayerTurn === "X") {
-      cell.textContent = "X";
-      currentPlayerTurn = determinePlayerTurn(PLAYER);
-    } else {
-      cell.textContent = "O";
-      currentPlayerTurn = determinePlayerTurn(PLAYER);
-    }
+  if (currentPlayerTurn === "X") {
+    cell.textContent = "X";
+  } else {
+    cell.textContent = "O";
   }
 }
 
@@ -88,9 +112,9 @@ function placeMarkOnBoard(cell, currentPlayerTurn) {
 function isCellEmpty(cell) {
   let checkCellEmpty;
   if (cell.textContent === "") {
-    checkCellEmpty = true;
+    checkCellEmpty = "Empty";
   } else {
-    checkCellEmpty = false;
+    checkCellEmpty = "Full";
   }
   return checkCellEmpty;
 }
