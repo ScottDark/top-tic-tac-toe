@@ -66,23 +66,33 @@ function gameLogic(cell) {
   const PLAYER = createPlayerObjects();
   let currentPlayerTurn = determinePlayerTurn(PLAYER);
   let isGameComplete = gameProgress();
+  placeMarkOnBoard(cell, currentPlayerTurn);
+}
 
-  // Determines if X or O should be placed on board then ends turn.
-  while (isGameComplete === false) {
-    if (cell.textContent === "") {
-      if (currentPlayerTurn === "X") {
-        cell.textContent = "X";
-        currentPlayerTurn = determinePlayerTurn(PLAYER);
-      } else {
-        cell.textContent = "O";
-        currentPlayerTurn = determinePlayerTurn(PLAYER);
-      }
+/* Place marker on board depending on whose turn it is */
+function placeMarkOnBoard(cell, currentPlayerTurn) {
+  let checkCellEmpty = isCellEmpty(cell);
+
+  if (checkCellEmpty === true) {
+    if (currentPlayerTurn === "X") {
+      cell.textContent = "X";
+      currentPlayerTurn = determinePlayerTurn(PLAYER);
     } else {
-      console.log("Turn is complete.");
-      // Continue the game - Start here next day.
-      break;
+      cell.textContent = "O";
+      currentPlayerTurn = determinePlayerTurn(PLAYER);
     }
   }
+}
+
+/* Determine if cell on board is empty or not. */
+function isCellEmpty(cell) {
+  let checkCellEmpty;
+  if (cell.textContent === "") {
+    checkCellEmpty = true;
+  } else {
+    checkCellEmpty = false;
+  }
+  return checkCellEmpty;
 }
 
 /* Determine whose turn it is to play. */
