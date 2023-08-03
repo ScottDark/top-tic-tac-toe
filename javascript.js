@@ -1,74 +1,81 @@
-loadEventListeners();
+loadGame();
 
-/* Prevent default on submit for player names form
-   Loads event listeners on page load */
-function loadEventListeners() {
+/* Load the game necessary to start playing. */
+function loadGame() {
+  getPlayerNames();
+  getGameBoardCells();
+}
+
+/* Get player names from form. */
+function getPlayerNames() {
   document.addEventListener("submit", (e) => {
     e.preventDefault();
-    setPlayerData();
-    document.querySelector(".player-name-status").removeAttribute("hidden");
+
+    const PLAYER_FORM = document.querySelector("#player-name-form");
+    createPlayerObjects(PLAYER_FORM);
   });
+}
 
-  const selectGameBoard = document.querySelector("#game-board");
-  const getGameBoardCell = selectGameBoard.querySelectorAll(":scope > div");
+/* Get all div on the gameboard for game logic. */
+function getGameBoardCells() {
+  const SELECT_GAMEBOARD = document.querySelector("#game-board");
+  const SELECT_GAMEBOARD_CELL =
+    SELECT_GAMEBOARD.querySelectorAll(":scope > div");
 
-  getGameBoardCell.forEach((cell) => {
+  SELECT_GAMEBOARD_CELL.forEach((cell) => {
     cell.addEventListener("click", () => {
       gameLogic(cell);
     });
   });
 }
 
-/* Set player information from form */
-function setPlayerData() {
-  const playerName = document.querySelector("#player-name-form");
-
-  // Default with no player names entered.
-  const playerX = {
+/* Creates two player objects to distinguish each player. */
+function createPlayerObjects(PLAYER_FORM) {
+  const player_X = {
     name: "Player X",
     side: "X",
     turnCounter: 0,
   };
 
-  const playerO = {
+  const player_O = {
     name: "Player O",
     side: "O",
     turnCounter: 0,
   };
-  // If no entered names use default else use names from form.
-  if (
-    playerName.playerxname.value === "" ||
-    playerName.playeroname.value === ""
-  ) {
-    // Nothing - Use default player names.
-  } else {
-    playerX.name = playerName.playerxname.value;
-    playerO.name = playerName.playeroname.value;
-  }
 
-  return { playerX, playerO };
+  determinePlayerName(PLAYER_FORM, player_X, player_O);
+
+  return { player_X, player_O };
 }
 
-/*  */
+/* Use default name or user inputted name from form. */
+function determinePlayerName(PLAYER_FORM, player_X, player_O) {
+  const PLAYER_X_NAME = document.querySelector("#player-x-name").value;
+  const PLAYER_O_NAME = document.querySelector("#player-o-name").value;
 
-/* Game logic  to determine winner*/
+  if (PLAYER_X_NAME === "" || PLAYER_O_NAME === "") {
+    // Do Nothing, leave default names.
+  } else {
+    player_X.name = PLAYER_X_NAME;
+    player_O.name = PLAYER_O_NAME;
+  }
+}
+
+/* Game logic to determine game flow.*/
 function gameLogic(cell) {
-  const player = setPlayerData();
-  // Determine next players turn.
-  let currentPlayerTurn = determinePlayerTurn(player);
-  // Determines if turn is complete.
+  const PLAYER = createPlayerObjects();
+  let currentPlayerTurn = determinePlayerTurn(PLAYER);
   let isGameComplete = gameProgress();
 
   // Determines if X or O should be placed on board then ends turn.
-  // Game continues.
   while (isGameComplete === false) {
     if (cell.textContent === "") {
       if (currentPlayerTurn === "X") {
         cell.textContent = "X";
-        currentPlayerTurn = determinePlayerTurn(player);
+        currentPlayerTurn = determinePlayerTurn(PLAYER);
       } else {
         cell.textContent = "O";
-        currentPlayerTurn = determinePlayerTurn(player);
+        currentPlayerTurn = determinePlayerTurn(PLAYER);
       }
     } else {
       console.log("Turn is complete.");
@@ -78,25 +85,24 @@ function gameLogic(cell) {
   }
 }
 
-/* Determine players turn. */
-function determinePlayerTurn(player) {
-  // Count if it is the player turn. If X counter is higher it is O's turn
-  // if not it is X's turn.
-  let playerTurn;
+/* Determine whose turn it is to play. */
+function determinePlayerTurn(PLAYER) {
+  let currentPlayerTurn;
+  let player_X_TurnCounter = PLAYER.player_X.turnCounter;
+  let player_O_TurnCounter = PLAYER.player_O.turnCounter;
 
-  if (player.playerX.turnCounter <= player.playerO.turnCounter) {
-    console.log("Player X's turn.");
-    player.playerX.turnCounter++;
-    playerTurn = "X";
+  // X always plays first.
+  if (player_X_TurnCounter === player_O_TurnCounter) {
+    PLAYER.player_X.turnCounter++;
+    currentPlayerTurn = "X";
   } else {
-    console.log("Player O's turn.");
-    player.playerO.turnCounter++;
-    playerTurn = "O";
+    PLAYER.player_O.turnCounter++;
+    currentPlayerTurn = "O";
   }
-  return playerTurn;
+  return currentPlayerTurn;
 }
 
-/* Game in progress (used to determine when game is ended) */
+/* Determines if game has ended. */
 function gameProgress() {
   let isGameComplete = false;
 
