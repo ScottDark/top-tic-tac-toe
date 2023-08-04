@@ -1,25 +1,17 @@
+/* Global objects to help maintain runtime. */
+const PLAYER_X = {
+  name: "Player X",
+  side: "X",
+  turnCounter: 0,
+};
+
+const PLAYER_O = {
+  name: "Player O",
+  side: "O",
+  turnCounter: 0,
+};
+
 loadGame();
-
-/* TO DO:
-Player objects get deleted after submitting because they go out of scope.
-The same thing happens after I click a square with no names. The default
-objects get deleted because the program ends and everything becomes out
-of scope and is released from memory after a click ends or names are 
-submitted.
-
-Solution:
-Figure out how to prevent the objects from going out of scope when names
-are submitted
-&&
-figure out how to keep the objects in scope after a cell is clicked.
-
-Fix:
-Make objects global variables
-Have a database to read and write from so they can be loaded on demand.
-
-We are not working with external storage besides memory yet so we have to
-either do global variables to keep them in scope or find a way to keep
-the program running while the page is open.*/
 
 /* Load the game necessary to start playing. */
 function loadGame() {
@@ -52,21 +44,9 @@ function getGameBoardCells() {
 
 /* Creates two player objects to distinguish each player. */
 function createPlayerObjects(PLAYER_FORM) {
-  const player_X = {
-    name: "Player X",
-    side: "X",
-    turnCounter: 0,
-  };
+  determinePlayerName(PLAYER_FORM, PLAYER_X, PLAYER_O);
 
-  const player_O = {
-    name: "Player O",
-    side: "O",
-    turnCounter: 0,
-  };
-
-  determinePlayerName(PLAYER_FORM, player_X, player_O);
-
-  return { player_X, player_O };
+  return { player_X: PLAYER_X, player_O: PLAYER_O };
 }
 
 /* Use default name or user inputted name from form. */
