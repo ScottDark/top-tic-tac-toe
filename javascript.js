@@ -1,29 +1,3 @@
-const PLAYER_X = {
-  name: "Player X",
-  side: "X",
-  turnCounter: 0,
-};
-
-const PLAYER_O = {
-  name: "Player O",
-  side: "O",
-  turnCounter: 0,
-};
-
-// const GAMEBOARD_DATA = {
-//   topLeftCell: "Empty",
-//   topCenterCell: "Empty",
-//   topRightCell: "Empty",
-
-//   middleLeftCell: "Empty",
-//   middleCenterCell: "Empty",
-//   middleRightCell: "Empty",
-
-//   bottomLeftCell: "Empty",
-//   bottomCenterCell: "Empty",
-//   bottomRightCell: "Empty",
-// };
-
 loadGame();
 
 /* Load the game necessary to start playing. */
@@ -60,6 +34,18 @@ function getGameBoardCells() {
     });
   });
 }
+
+const PLAYER_X = {
+  name: "Player X",
+  side: "X",
+  turnCounter: 0,
+};
+
+const PLAYER_O = {
+  name: "Player O",
+  side: "O",
+  turnCounter: 0,
+};
 
 /* Creates two player objects to distinguish each player. */
 function createPlayerObjects() {
@@ -118,10 +104,11 @@ const GAMEBOARD = {
 function saveGameboardData(cell, currentPlayerTurn) {
   let boardIndexOfCell = cell.getAttribute("data-board-index");
   let boardIndexOfCellRow = cell.getAttribute("data-board-row");
-  const gameboardData = GAMEBOARD.gameboardData;
 
   GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCell] =
     currentPlayerTurn;
+
+  console.log(GAMEBOARD.gameboardData);
 }
 
 /* Determine if cell on board is empty or not. */
