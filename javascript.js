@@ -92,6 +92,24 @@ function placeMarkOnBoard(cell, currentPlayerTurn) {
   }
 }
 
+/* Determines if game has ended. */
+function gameProgress() {
+  let isGameComplete = false;
+
+  const gameWinningSolutions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  return isGameComplete;
+}
+
 const GAMEBOARD = {
   gameboardData: [
     ["", "", ""],
@@ -102,14 +120,19 @@ const GAMEBOARD = {
 
 /* Save game board */
 function saveGameboardData(cell, currentPlayerTurn) {
-  let boardIndexOfCell = cell.getAttribute("data-board-index");
+  // Used to access a multidimensional array
+  let boardIndexOfCellCol = cell.getAttribute("data-board-col");
   let boardIndexOfCellRow = cell.getAttribute("data-board-row");
 
-  GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCell] =
+  // Used to uniquely identify each cell.
+  let boardIndexOfCellIndex = cell.getAttribute("data-board-index");
+
+  GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCellCol] =
     currentPlayerTurn;
+  console.log(GAMEBOARD.gameboardData);
 }
 
-/* Determine if cell on board is empty or not. */
+/* Determine if cell on board is empty */
 function isCellEmpty(cell) {
   let checkCellEmpty;
   if (cell.textContent === "") {
@@ -135,13 +158,6 @@ function determinePlayerTurn(PLAYER) {
     currentPlayerTurn = "O";
   }
   return currentPlayerTurn;
-}
-
-/* Determines if game has ended. */
-function gameProgress() {
-  let isGameComplete = false;
-
-  return isGameComplete;
 }
 
 /* Start new game button */
