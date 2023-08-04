@@ -1,4 +1,3 @@
-/* Global objects to help maintain runtime. */
 const PLAYER_X = {
   name: "Player X",
   side: "X",
@@ -23,10 +22,16 @@ function loadGame() {
 function getPlayerNames() {
   document.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    const PLAYER_FORM = document.querySelector("#player-name-form");
-    createPlayerObjects(PLAYER_FORM);
+    createPlayerObjects();
+    hideModal();
   });
+}
+
+/* Hide modal on submit */
+function hideModal() {
+  const formModal = document.querySelector("#myModal");
+  const modal = bootstrap.Modal.getInstance(formModal);
+  modal.hide();
 }
 
 /* Get all div on the gameboard for game logic. */
@@ -43,14 +48,14 @@ function getGameBoardCells() {
 }
 
 /* Creates two player objects to distinguish each player. */
-function createPlayerObjects(PLAYER_FORM) {
-  determinePlayerName(PLAYER_FORM, PLAYER_X, PLAYER_O);
+function createPlayerObjects() {
+  determinePlayerName(PLAYER_X, PLAYER_O);
 
   return { player_X: PLAYER_X, player_O: PLAYER_O };
 }
 
 /* Use default name or user inputted name from form. */
-function determinePlayerName(PLAYER_FORM, player_X, player_O) {
+function determinePlayerName(player_X, player_O) {
   const PLAYER_X_NAME = document.querySelector("#player-x-name").value;
   const PLAYER_O_NAME = document.querySelector("#player-o-name").value;
 
@@ -65,9 +70,7 @@ function determinePlayerName(PLAYER_FORM, player_X, player_O) {
 /* Game logic to control game flow.*/
 function gameLogic(cell) {
   const PLAYER = createPlayerObjects();
-  let isGameComplete = gameProgress();
-
-  // Game continues until game is completed.
+  let isGameComplete = gameProgress(); //TODO: allow game to end.
 
   let currentPlayerTurn = determinePlayerTurn(PLAYER);
 
