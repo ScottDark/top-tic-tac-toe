@@ -10,6 +10,20 @@ const PLAYER_O = {
   turnCounter: 0,
 };
 
+// const GAMEBOARD_DATA = {
+//   topLeftCell: "Empty",
+//   topCenterCell: "Empty",
+//   topRightCell: "Empty",
+
+//   middleLeftCell: "Empty",
+//   middleCenterCell: "Empty",
+//   middleRightCell: "Empty",
+
+//   bottomLeftCell: "Empty",
+//   bottomCenterCell: "Empty",
+//   bottomRightCell: "Empty",
+// };
+
 loadGame();
 
 /* Load the game necessary to start playing. */
@@ -89,6 +103,25 @@ function placeMarkOnBoard(cell, currentPlayerTurn) {
   } else {
     cell.textContent = "O";
   }
+  saveGameboardData(cell, currentPlayerTurn);
+}
+
+const GAMEBOARD = {
+  gameboardData: [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ],
+};
+
+/* Save game board */
+function saveGameboardData(cell, currentPlayerTurn) {
+  let boardIndexOfCell = cell.getAttribute("data-board-index");
+  let boardIndexOfCellRow = cell.getAttribute("data-board-row");
+  const gameboardData = GAMEBOARD.gameboardData;
+
+  GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCell] =
+    currentPlayerTurn;
 }
 
 /* Determine if cell on board is empty or not. */
