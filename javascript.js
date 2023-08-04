@@ -30,7 +30,7 @@ function getGameBoardCells() {
 
   SELECT_GAMEBOARD_CELL.forEach((cell) => {
     cell.addEventListener("click", () => {
-      gameLogic(cell);
+      gameController(cell);
     });
   });
 }
@@ -67,8 +67,8 @@ function determinePlayerName(player_X, player_O) {
   }
 }
 
-/* Game logic to control game flow.*/
-function gameLogic(cell) {
+/* Control flow of the game.*/
+function gameController(cell) {
   const PLAYER = createPlayerObjects();
   let isGameComplete = gameProgress(); //TODO: allow game to end.
 
@@ -79,6 +79,7 @@ function gameLogic(cell) {
 
   if (checkCellEmpty === CELL_IS_EMPTY) {
     placeMarkOnBoard(cell, currentPlayerTurn);
+    saveGameboardData(cell, currentPlayerTurn);
   }
 }
 
@@ -89,7 +90,6 @@ function placeMarkOnBoard(cell, currentPlayerTurn) {
   } else {
     cell.textContent = "O";
   }
-  saveGameboardData(cell, currentPlayerTurn);
 }
 
 const GAMEBOARD = {
@@ -107,8 +107,6 @@ function saveGameboardData(cell, currentPlayerTurn) {
 
   GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCell] =
     currentPlayerTurn;
-
-  console.log(GAMEBOARD.gameboardData);
 }
 
 /* Determine if cell on board is empty or not. */
