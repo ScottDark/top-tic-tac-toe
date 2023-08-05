@@ -30,7 +30,9 @@ function getGameBoardCells() {
 
   SELECT_GAMEBOARD_CELL.forEach((cell) => {
     cell.addEventListener("click", () => {
-      gameController(cell);
+      if (!gameWon) {
+        gameController(cell);
+      }
     });
   });
 }
@@ -67,19 +69,24 @@ function determinePlayerName(player_X, player_O) {
   }
 }
 
+let gameWon = false;
+
 /* Control flow of the game.*/
 function gameController(cell) {
+  if (gameWon) {
+    return;
+  }
+
   const PLAYER = createPlayerObjects();
-  let isGameComplete = gameProgress(); //TODO: allow game to end.
-
   let currentPlayerTurn = determinePlayerTurn(PLAYER);
-
   let checkCellEmpty = isCellEmpty(cell);
   const CELL_IS_EMPTY = "Empty";
 
   if (checkCellEmpty === CELL_IS_EMPTY) {
     placeMarkOnBoard(cell, currentPlayerTurn);
-    saveGameboardData(cell, currentPlayerTurn);
+    if (checkForWinner(currentPlayerTurn)) {
+      gameWon = true;
+    }
   }
 }
 
@@ -93,7 +100,7 @@ function placeMarkOnBoard(cell, currentPlayerTurn) {
 }
 
 /* Determines if game has ended. */
-function gameProgress() {
+function checkForWinner(currentPlayerTurn) {
   let isGameComplete = false;
 
   const gameWinningSolutions = [
@@ -107,29 +114,24 @@ function gameProgress() {
     [2, 4, 6],
   ];
 
-  return isGameComplete;
-}
+  const cells = document.querySelectorAll("#game-board > div");
 
-const GAMEBOARD = {
-  gameboardData: [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ],
-};
+  // Loop through each winning solution to check if there is a winner
+  for (const solution of gameWinningSolutions) {
+    const [a, b, c] = solution;
 
-/* Save game board */
-function saveGameboardData(cell, currentPlayerTurn) {
-  // Used to access a multidimensional array
-  let boardIndexOfCellCol = cell.getAttribute("data-board-col");
-  let boardIndexOfCellRow = cell.getAttribute("data-board-row");
+    if (
+      cells[a].textContent === currentPlayerTurn &&
+      cells[b].textContent === currentPlayerTurn &&
+      cells[c].textContent === currentPlayerTurn
+    ) {
+      // We have a winner!
+      displayGameWinner(currentPlayerTurn);
+      return true;
+    }
+  }
 
-  // Used to uniquely identify each cell.
-  let boardIndexOfCellIndex = cell.getAttribute("data-board-index");
-
-  GAMEBOARD.gameboardData[boardIndexOfCellRow][boardIndexOfCellCol] =
-    currentPlayerTurn;
-  console.log(GAMEBOARD.gameboardData);
+  return false;
 }
 
 /* Determine if cell on board is empty */
@@ -163,5 +165,11 @@ function determinePlayerTurn(PLAYER) {
 /* Start new game button */
 function startNewGame() {}
 
-/* Display game winner */
-function displayGameWinner() {}
+function displayGameWinner(winner) {
+  const gameWinnerElement = document.querySelector("#game-winner");
+  if (winner === PLAYER_X.side) {
+    gameWinnerElement.textContent = `${PLAYER_X.name} wins!`;
+  } else {
+    gameWinnerElement.textContent = `${PLAYER_O.name} wins!`;
+  }
+}
