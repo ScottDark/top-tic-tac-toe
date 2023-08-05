@@ -4,13 +4,19 @@ loadGame();
 function loadGame() {
   getPlayerNames();
   getGameBoardCells();
+  attachStartGameListener();
+}
+
+function attachStartGameListener() {
+  const startGameButton = document.getElementById("start-game-button");
+  startGameButton.addEventListener("click", startNewGame);
 }
 
 /* Get player names from form. */
 function getPlayerNames() {
   document.addEventListener("submit", (e) => {
     e.preventDefault();
-    createPlayerObjects();
+    determinePlayerName();
     hideModal();
   });
 }
@@ -40,34 +46,14 @@ function getGameBoardCells() {
 const PLAYER_X = {
   name: "Player X",
   side: "X",
-  turnCounter: 0,
 };
 
 const PLAYER_O = {
   name: "Player O",
   side: "O",
-  turnCounter: 0,
 };
 
-/* Creates two player objects to distinguish each player. */
-function createPlayerObjects() {
-  determinePlayerName(PLAYER_X, PLAYER_O);
-
-  return { player_X: PLAYER_X, player_O: PLAYER_O };
-}
-
-/* Use default name or user inputted name from form. */
-function determinePlayerName(player_X, player_O) {
-  const PLAYER_X_NAME = document.querySelector("#player-x-name").value;
-  const PLAYER_O_NAME = document.querySelector("#player-o-name").value;
-
-  if (PLAYER_X_NAME === "" || PLAYER_O_NAME === "") {
-    // Do Nothing, leave default names.
-  } else {
-    player_X.name = PLAYER_X_NAME;
-    player_O.name = PLAYER_O_NAME;
-  }
-}
+let currentPlayerTurn = PLAYER_X.side; // Start with Player X's turn
 
 let gameWon = false;
 
@@ -77,32 +63,31 @@ function gameController(cell) {
     return;
   }
 
-  const PLAYER = createPlayerObjects();
-  let currentPlayerTurn = determinePlayerTurn(PLAYER);
   let checkCellEmpty = isCellEmpty(cell);
   const CELL_IS_EMPTY = "Empty";
 
   if (checkCellEmpty === CELL_IS_EMPTY) {
-    placeMarkOnBoard(cell, currentPlayerTurn);
+    placeMarkOnBoard(cell);
     if (checkForWinner(currentPlayerTurn)) {
       gameWon = true;
+      displayGameWinner(currentPlayerTurn);
+    } else if (isBoardFull()) {
+      gameWon = true;
+      displayDraw();
+    } else {
+      currentPlayerTurn =
+        currentPlayerTurn === PLAYER_X.side ? PLAYER_O.side : PLAYER_X.side;
     }
   }
 }
 
 /* Place marker on board depending on whose turn it is */
-function placeMarkOnBoard(cell, currentPlayerTurn) {
-  if (currentPlayerTurn === "X") {
-    cell.textContent = "X";
-  } else {
-    cell.textContent = "O";
-  }
+function placeMarkOnBoard(cell) {
+  cell.textContent = currentPlayerTurn;
 }
 
 /* Determines if game has ended. */
 function checkForWinner(currentPlayerTurn) {
-  let isGameComplete = false;
-
   const gameWinningSolutions = [
     [0, 1, 2],
     [3, 4, 5],
@@ -126,7 +111,6 @@ function checkForWinner(currentPlayerTurn) {
       cells[c].textContent === currentPlayerTurn
     ) {
       // We have a winner!
-      displayGameWinner(currentPlayerTurn);
       return true;
     }
   }
@@ -136,34 +120,19 @@ function checkForWinner(currentPlayerTurn) {
 
 /* Determine if cell on board is empty */
 function isCellEmpty(cell) {
-  let checkCellEmpty;
-  if (cell.textContent === "") {
-    checkCellEmpty = "Empty";
-  } else {
-    checkCellEmpty = "Full";
-  }
-  return checkCellEmpty;
+  return cell.textContent === "" ? "Empty" : "Full";
 }
 
-/* Determine whose turn it is to play. */
-function determinePlayerTurn(PLAYER) {
-  let currentPlayerTurn;
-  let player_X_TurnCounter = PLAYER.player_X.turnCounter;
-  let player_O_TurnCounter = PLAYER.player_O.turnCounter;
-
-  // X always plays first.
-  if (player_X_TurnCounter === player_O_TurnCounter) {
-    PLAYER.player_X.turnCounter++;
-    currentPlayerTurn = "X";
-  } else {
-    PLAYER.player_O.turnCounter++;
-    currentPlayerTurn = "O";
+/* Check if the game board is full */
+function isBoardFull() {
+  const cells = document.querySelectorAll("#game-board > div");
+  for (const cell of cells) {
+    if (isCellEmpty(cell) === "Empty") {
+      return false;
+    }
   }
-  return currentPlayerTurn;
+  return true;
 }
-
-/* Start new game button */
-function startNewGame() {}
 
 function displayGameWinner(winner) {
   const gameWinnerElement = document.querySelector("#game-winner");
@@ -171,5 +140,48 @@ function displayGameWinner(winner) {
     gameWinnerElement.textContent = `${PLAYER_X.name} wins!`;
   } else {
     gameWinnerElement.textContent = `${PLAYER_O.name} wins!`;
+  }
+}
+
+function displayDraw() {
+  const gameWinnerElement = document.querySelector("#game-winner");
+  gameWinnerElement.textContent = "DRAW!";
+}
+
+/* Start new game button */
+function startNewGame() {
+  gameWon = false;
+  resetGameboard();
+  resetPlayerTurns();
+}
+
+/* Reset game board */
+function resetGameboard() {
+  const SELECT_GAMEBOARD = document.querySelector("#game-board");
+  const SELECT_GAMEBOARD_CELL =
+    SELECT_GAMEBOARD.querySelectorAll(":scope > div");
+
+  SELECT_GAMEBOARD_CELL.forEach((cell) => {
+    cell.textContent = "";
+  });
+
+  const gameWinnerElement = document.querySelector("#game-winner");
+  gameWinnerElement.textContent = "";
+}
+
+/* Reset player turn counters */
+function resetPlayerTurns() {
+  currentPlayerTurn = PLAYER_X.side;
+}
+
+function determinePlayerName() {
+  const PLAYER_X_NAME = document.querySelector("#player-x-name").value;
+  const PLAYER_O_NAME = document.querySelector("#player-o-name").value;
+
+  if (PLAYER_X_NAME === "" || PLAYER_O_NAME === "") {
+    // Do Nothing, leave default names.
+  } else {
+    PLAYER_X.name = PLAYER_X_NAME;
+    PLAYER_O.name = PLAYER_O_NAME;
   }
 }
